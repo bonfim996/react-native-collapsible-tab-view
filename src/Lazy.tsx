@@ -19,7 +19,8 @@ export const Lazy: React.FC<{
   startMounted?: boolean
   cancelLazyFadeIn?: boolean
   children: React.ReactElement
-}> = ({ children, startMounted, cancelLazyFadeIn }) => {
+  raw?: boolean
+}> = ({ children, startMounted, cancelLazyFadeIn, raw }) => {
   const name = useTabNameContext()
   const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()
   const [canMount, setCanMount] = React.useState(!!startMounted)
@@ -66,7 +67,7 @@ export const Lazy: React.FC<{
   useDerivedValue(() => {
     if (afterMount) {
       const tabIndex = tabNames.value.findIndex((n) => n === name)
-      if (ref && tabIndex >= 0) {
+      if (ref && tabIndex >= 0 && !raw) {
         scrollTo(ref, 0, scrollY.value[tabIndex], false, `[${name}] lazy sync`)
       }
       if (!cancelLazyFadeIn && opacity.value !== 1)
