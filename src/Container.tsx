@@ -438,6 +438,7 @@ export const Container = React.memo(
                         <Lazy
                           startMounted={i === index.value}
                           cancelLazyFadeIn={cancelLazyFadeIn}
+                          raw
                         >
                           {
                             React.Children.toArray(children)[
