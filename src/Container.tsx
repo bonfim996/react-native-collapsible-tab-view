@@ -81,6 +81,7 @@ export const Container = React.memo(
         onTabChange,
         width: customWidth,
         allowHeaderOverscroll,
+        raw,
       },
       ref
     ) => {
@@ -167,6 +168,9 @@ export const Container = React.memo(
 
       const resyncTabScroll = () => {
         'worklet'
+        if (raw) {
+          return
+        }
         for (const name of tabNamesArray) {
           scrollToImpl(
             refMap[name],
@@ -438,7 +442,7 @@ export const Container = React.memo(
                         <Lazy
                           startMounted={i === index.value}
                           cancelLazyFadeIn={cancelLazyFadeIn}
-                          raw
+                          raw={raw}
                         >
                           {
                             React.Children.toArray(children)[

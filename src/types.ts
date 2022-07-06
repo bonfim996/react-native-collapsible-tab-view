@@ -65,6 +65,10 @@ export type TabReactElement<T extends TabName = TabName> = React.ReactElement<
 > | null
 
 export type CollapsibleProps = {
+  /*
+   * Cancel animations
+   */
+  raw?: boolean
   initialTabName?: TabName
   /**
    * Is optional, but will optimize the first render.
