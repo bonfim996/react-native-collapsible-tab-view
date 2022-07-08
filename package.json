@@ -17,9 +17,7 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn",
-    "prepack": "bob build",
-    "docs": "ts-node ./documentation/buildDocs.ts",
-    "prepare": "bob build"
+    "docs": "ts-node ./documentation/buildDocs.ts"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -68,6 +66,7 @@
     "react-native-builder-bob": "^0.18.2",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-pager-view": "^5",
+    "@shopify/flash-list": "^1.0.3",
     "react-native-reanimated": "^2.3.0",
     "release-it": "^13.6.6",
     "ts-node": "^9.1.1",
@@ -108,7 +107,6 @@
     ]
   },
   "dependencies": {
-    "@shopify/flash-list": "^1.0.3",
     "use-deep-compare": "^1.1.0"
   },
   "packageManager": "yarn@1.22.11",
