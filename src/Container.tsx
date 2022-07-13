@@ -299,6 +299,9 @@ export const Container = React.memo(
           const i = tabNames.value.findIndex((n) => n === name)
 
           if (name === focusedTab.value) {
+            if (raw) {
+              return
+            }
             const ref = refMap[name]
             runOnUI(scrollToImpl)(
               ref,
