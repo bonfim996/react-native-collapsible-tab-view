@@ -104,9 +104,14 @@ export function useTabProps<T extends TabName>(
  * const { focusedTab, ...rest } = useTabsContext()
  * ```
  */
-export function useTabsContext(): ContextType<TabName> {
+export function useTabsContext(raw?: boolean): ContextType<TabName> | null {
   const c = useContext(Context)
-  if (!c) throw new Error('useTabsContext must be inside a Tabs.Container')
+  if (!c) {
+    if (raw) {
+      return null
+    }
+    throw new Error('useTabsContext must be inside a Tabs.Container')
+  }
   return c
 }
 
@@ -135,7 +140,7 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     containerHeight,
     width,
     allowHeaderOverscroll,
-  } = useTabsContext()
+  } = useTabsContext()!
   const [containerHeightVal, tabBarHeightVal, headerHeightVal] = [
     useConvertAnimatedToValue(containerHeight),
     useConvertAnimatedToValue(tabBarHeight),
@@ -172,7 +177,7 @@ export function useCollapsibleStyle(): CollapsibleStyle {
 }
 
 export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
-  const { tabNames, contentHeights } = useTabsContext()
+  const { tabNames, contentHeights } = useTabsContext()!
   const setContentHeights = useCallback(
     (name: TabName, height: number) => {
       const tabIndex = tabNames.value.indexOf(name)
@@ -213,7 +218,7 @@ export function useChainCallback(fns: (Function | undefined)[]) {
 }
 
 export function useScroller<T extends RefComponent>() {
-  const { contentInset } = useTabsContext()
+  const { contentInset } = useTabsContext()!
 
   const scroller = useCallback(
     (
@@ -259,7 +264,7 @@ export const useScrollHandlerY = (name: TabName) => {
     contentHeights,
     indexDecimal,
     allowHeaderOverscroll,
-  } = useTabsContext()
+  } = useTabsContext()!
 
   const enabled = useSharedValue(false)
 
@@ -580,7 +585,7 @@ export interface HeaderMeasurements {
 }
 
 export function useHeaderMeasurements(): HeaderMeasurements {
-  const { headerTranslateY, headerHeight } = useTabsContext()
+  const { headerTranslateY, headerHeight } = useTabsContext()!
   return {
     top: headerTranslateY,
     height: headerHeight,
@@ -591,15 +596,20 @@ export function useHeaderMeasurements(): HeaderMeasurements {
  * Returns the vertical scroll position of the current tab as an Animated SharedValue
  */
 export function useCurrentTabScrollY(): Animated.SharedValue<number> {
-  const { scrollYCurrent } = useTabsContext()
+  const { scrollYCurrent } = useTabsContext()!
   return scrollYCurrent
 }
 
 /**
  * Returns the currently focused tab name
  */
-export function useFocusedTab() {
-  const { focusedTab } = useTabsContext()
+export function useFocusedTab(raw?: boolean) {
+  const tabsContext = useTabsContext(raw)
+  if (!tabsContext) {
+    return ''
+  }
+  const { focusedTab } = tabsContext
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const focusedTabValue = useConvertAnimatedToValue(focusedTab)
   return focusedTabValue
 }
@@ -608,7 +618,7 @@ export function useFocusedTab() {
  * Returns an animated value representing the current tab index, as a floating point number
  */
 export function useAnimatedTabIndex() {
-  const { indexDecimal } = useTabsContext()
+  const { indexDecimal } = useTabsContext()!
   return indexDecimal
 }
 
