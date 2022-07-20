@@ -105,9 +105,8 @@ function FlashListImpl<R>(
       {...rest}
       ref={ref}
       bouncesZoom={false}
-      style={memoStyle}
-      // @ts-ignore
-      contentContainerStyle={memoContentContainerStyle}
+      // style={memoStyle}
+      // contentContainerStyle={memoContentContainerStyle}
       progressViewOffset={progressViewOffset}
       onScroll={scrollHandler}
       onContentSizeChange={scrollContentSizeChangeHandlers}
