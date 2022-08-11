@@ -63,6 +63,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
   tabStyle,
   width: customWidth,
   keepActiveTabCentered,
+  rightIconArray,
 }: MaterialTabBarProps<T>): React.ReactElement => {
   const tabBarRef = useAnimatedRef<Animated.ScrollView>()
   const windowWidth = useWindowDimensions().width
@@ -211,6 +212,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
             name={name}
             label={tabProps.get(name)?.label || getLabelText(name)}
             onPress={onTabPress}
+            rightIcon={rightIconArray?.[i]}
             onLayout={
               scrollEnabled
                 ? (event) => onTabItemLayout(event, name)

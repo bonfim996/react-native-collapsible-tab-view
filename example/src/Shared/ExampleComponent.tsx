@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons'
 import React from 'react'
 import {
   Tabs,
@@ -25,10 +26,27 @@ const Example = React.forwardRef<CollapsibleRef, Props>(
             <Article />
           </Tabs.Tab>
         ) : null}
-        <Tabs.Tab name="albums" label="Albums">
+        <Tabs.Tab
+          rightIcon={{
+            icon: (
+              <Ionicons name="md-checkmark-circle" size={32} color="green" />
+            ),
+          }}
+          name="albums"
+          label="Albums"
+        >
           <Albums />
         </Tabs.Tab>
-        <Tabs.Tab name="contacts" label="Contacts">
+        <Tabs.Tab
+          rightIcon={{
+            icon: (
+              <Ionicons name="md-checkmark-circle" size={16} color="green" />
+            ),
+            onPress: () => console.log('Hello world!'),
+          }}
+          name="contacts"
+          label="Contacts"
+        >
           <Contacts emptyContacts={emptyContacts} />
         </Tabs.Tab>
         <Tabs.Tab name="ordered" label="Ordered">

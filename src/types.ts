@@ -249,8 +249,14 @@ export type TabItemProps<T extends TabName> = {
   label: string | ((props: TabItemProps<T>) => React.ReactNode)
 }
 
+export type TabRightIconProps = {
+  icon: JSX.Element
+  onPress?: () => void
+}
+
 export type TabProps<T extends TabName> = {
   readonly name: T
   label?: TabItemProps<T>['label']
   children: React.ReactNode
+  rightIcon?: TabRightIconProps
 }
