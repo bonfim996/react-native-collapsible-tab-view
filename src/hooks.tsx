@@ -66,7 +66,7 @@ export function useTabProps<T extends TabName>(
   children: TabReactElement<T>[] | TabReactElement<T>,
   tabType: Function
 ): [TabsWithProps<T>, T[], (TabRightIconProps | undefined)[]] {
-  const rightIconsList = useMemo(() => {
+  const rightIconsList = () => {
     if (!children) {
       return []
     }
@@ -79,7 +79,7 @@ export function useTabProps<T extends TabName>(
       rightIcons.push(rightIcon)
     })
     return rightIcons
-  }, [children])
+  }
 
   const options = useMemo(() => {
     const tabOptions: TabsWithProps<T> = new Map()
@@ -110,10 +110,7 @@ export function useTabProps<T extends TabName>(
   const optionKeys = Array.from(options.keys())
   const memoizedOptions = useDeepCompareMemo(() => options, [optionEntries])
   const memoizedTabNames = useDeepCompareMemo(() => optionKeys, [optionKeys])
-  const memoizedRightIconsList = useDeepCompareMemo(() => rightIconsList, [
-    children,
-  ])
-  return [memoizedOptions, memoizedTabNames, memoizedRightIconsList]
+  return [memoizedOptions, memoizedTabNames, rightIconsList()]
 }
 
 /**
