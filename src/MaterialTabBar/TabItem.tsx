@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { StyleSheet, Pressable, Platform } from 'react-native'
 import Animated, {
   interpolate,
