@@ -20,4 +20,4 @@ import { CollapsibleProps, CollapsibleRef } from './types';
  * }
  * ```
  */
-export declare const Container: React.MemoExoticComponent<React.ForwardRefExoticComponent<CollapsibleProps & React.RefAttributes<CollapsibleRef<string>>>>;
+export declare const Container: React.ForwardRefExoticComponent<CollapsibleProps & React.RefAttributes<CollapsibleRef<string>>>;

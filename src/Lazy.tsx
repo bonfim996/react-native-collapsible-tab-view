@@ -22,7 +22,7 @@ export const Lazy: React.FC<{
   raw?: boolean
 }> = ({ children, startMounted, cancelLazyFadeIn, raw }) => {
   const name = useTabNameContext()
-  const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()
+  const { focusedTab, refMap, scrollY, tabNames } = useTabsContext()!
   const [canMount, setCanMount] = React.useState(!!startMounted)
   const [afterMount, setAfterMount] = React.useState(!!startMounted)
   const isSelfMounted = React.useRef(true)
@@ -35,7 +35,7 @@ export const Lazy: React.FC<{
     }
   }, [])
 
-  const allowToMount = React.useCallback(() => {
+  const allowToMount = () => {
     // wait the scene to be at least 50 ms focused, before mounting
     setTimeout(() => {
       if (focusedTab.value === name) {
@@ -46,7 +46,7 @@ export const Lazy: React.FC<{
         }, 10)
       }
     }, 50)
-  }, [focusedTab.value, name])
+  }
 
   useAnimatedReaction(
     () => {

@@ -12,11 +12,11 @@ const Header = () => {
 }
 
 const Example: React.FC = () => {
-  const renderItem: ListRenderItem<number> = React.useCallback(({ index }) => {
+  const renderItem: ListRenderItem<number> = ({ index }) => {
     return (
       <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
     )
-  }, [])
+  }
 
   return (
     <Tabs.Container

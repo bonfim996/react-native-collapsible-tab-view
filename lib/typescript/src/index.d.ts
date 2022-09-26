@@ -10,7 +10,7 @@ import { Tab } from './Tab';
 import { TabBarProps, CollapsibleProps, RefComponent, ContainerRef, CollapsibleRef, OnTabChangeCallback, TabItemProps, TabProps } from './types';
 export type { TabBarProps, CollapsibleProps, RefComponent, ContainerRef, MaterialTabBarProps, MaterialTabItemProps, CollapsibleRef, OnTabChangeCallback, TabItemProps, TabProps, };
 export declare const Tabs: {
-    Container: import("react").MemoExoticComponent<import("react").ForwardRefExoticComponent<CollapsibleProps & import("react").RefAttributes<CollapsibleRef<string>>>>;
+    Container: import("react").ForwardRefExoticComponent<CollapsibleProps & import("react").RefAttributes<CollapsibleRef<string>>>;
     Tab: typeof Tab;
     Lazy: import("react").FC<{
         startMounted?: boolean | undefined;

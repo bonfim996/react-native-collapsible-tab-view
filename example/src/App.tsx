@@ -65,27 +65,24 @@ const ExampleList: React.FC<object> = () => {
     setIndex(index)
   }, [])
 
-  const handleNavigateBack = React.useCallback(() => {
+  const handleNavigateBack = () => {
     handleNavigate(-1)
-  }, [handleNavigate])
+  }
 
-  const renderItem = React.useCallback(
-    (component: ExampleComponentType, i: number) => {
-      const enabled = !component.platform || component.platform === Platform.OS
-      return (
-        <TouchableOpacity
-          key={i}
-          style={styles.touchable}
-          onPress={enabled ? () => handleNavigate(i) : undefined}
-        >
-          <Text style={[styles.item, !enabled && styles.disabled]}>
-            {i + 1}. {component.title}
-          </Text>
-        </TouchableOpacity>
-      )
-    },
-    [handleNavigate]
-  )
+  const renderItem = (component: ExampleComponentType, i: number) => {
+    const enabled = !component.platform || component.platform === Platform.OS
+    return (
+      <TouchableOpacity
+        key={i}
+        style={styles.touchable}
+        onPress={enabled ? () => handleNavigate(i) : undefined}
+      >
+        <Text style={[styles.item, !enabled && styles.disabled]}>
+          {i + 1}. {component.title}
+        </Text>
+      </TouchableOpacity>
+    )
+  }
 
   const ExampleComponent = EXAMPLE_COMPONENTS[index] || null
   const backgroundColor = ExampleComponent?.backgroundColor

@@ -13,7 +13,7 @@ export declare function useTabProps<T extends TabName>(children: TabReactElement
  * const { focusedTab, ...rest } = useTabsContext()
  * ```
  */
-export declare function useTabsContext(): ContextType<TabName>;
+export declare function useTabsContext(raw?: boolean): ContextType<TabName> | null;
 /**
  * Access the parent tab screen from any deep component.
  *
@@ -71,7 +71,7 @@ export declare function useCurrentTabScrollY(): Animated.SharedValue<number>;
 /**
  * Returns the currently focused tab name
  */
-export declare function useFocusedTab(): string;
+export declare function useFocusedTab(raw?: boolean): string;
 /**
  * Returns an animated value representing the current tab index, as a floating point number
  */
