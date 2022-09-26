@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { StyleSheet, Pressable, Platform } from 'react-native'
+import { StyleSheet, Pressable, Platform, View } from 'react-native'
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -32,6 +32,7 @@ export const MaterialTabItem = <T extends TabName = string>(
     inactiveOpacity = 0.7,
     pressColor = '#DDDDDD',
     pressOpacity = Platform.OS === 'ios' ? 0.2 : 1,
+    rightIcon,
     ...rest
   } = props
 
@@ -62,6 +63,11 @@ export const MaterialTabItem = <T extends TabName = string>(
     return label(props)
   }, [label, labelStyle, props, stylez])
 
+  const onIconPress = () => {
+    onPress(name)
+    rightIcon?.onPress && rightIcon?.onPress()
+  }
+
   return (
     <Pressable
       onLayout={onLayout}
@@ -78,7 +84,14 @@ export const MaterialTabItem = <T extends TabName = string>(
       }}
       {...rest}
     >
-      {renderedLabel}
+      <View style={styles.row}>
+        {renderedLabel}
+        {rightIcon && (
+          <Pressable hitSlop={10} onPress={onIconPress}>
+            {rightIcon.icon}
+          </Pressable>
+        )}
+      </View>
     </Pressable>
   )
 }
@@ -95,5 +108,9 @@ const styles = StyleSheet.create({
   },
   label: {
     margin: 4,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 })

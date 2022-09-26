@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 
-import { TabBarProps, TabName, TabItemProps } from '../types'
+import { TabBarProps, TabName, TabItemProps, TabRightIconProps } from '../types'
 
 type AnimatedStyle = StyleProp<Animated.AnimateStyle<ViewStyle>>
 type AnimatedTextStyle = StyleProp<Animated.AnimateStyle<TextStyle>>
@@ -34,6 +34,8 @@ export type MaterialTabItemProps<T extends TabName> = TabItemProps<T> & {
    * Color applied to the label when inactive
    */
   inactiveColor?: string
+
+  rightIcon?: TabRightIconProps
 } & Omit<PressableProps, 'onPress' | 'children'>
 
 export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
@@ -86,6 +88,11 @@ export type MaterialTabBarProps<N extends TabName> = TabBarProps<N> & {
    * Whether to keep the currently active tab centered in a scrollable tab bar
    */
   keepActiveTabCentered?: boolean
+
+  /**
+   * List of rightIcon in tabs
+   */
+  rightIconArray?: TabRightIconProps[]
 }
 
 export type ItemLayout = {

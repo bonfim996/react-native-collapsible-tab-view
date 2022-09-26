@@ -38,6 +38,7 @@ import {
   TabReactElement,
   TabsWithProps,
   Ref,
+  TabRightIconProps,
 } from './types'
 
 export function useContainerRef() {
@@ -64,7 +65,22 @@ export function useAnimatedDynamicRefs(): [
 export function useTabProps<T extends TabName>(
   children: TabReactElement<T>[] | TabReactElement<T>,
   tabType: Function
-): [TabsWithProps<T>, T[]] {
+): [TabsWithProps<T>, T[], (TabRightIconProps | undefined)[]] {
+  const rightIconsList = () => {
+    if (!children) {
+      return []
+    }
+    const rightIcons: (undefined | TabRightIconProps)[] = []
+    Children.forEach(children, (element, _index) => {
+      if (!element) {
+        return
+      }
+      const { rightIcon } = element.props
+      rightIcons.push(rightIcon)
+    })
+    return rightIcons
+  }
+
   const options = useMemo(() => {
     const tabOptions: TabsWithProps<T> = new Map()
     if (children) {
@@ -94,7 +110,7 @@ export function useTabProps<T extends TabName>(
   const optionKeys = Array.from(options.keys())
   const memoizedOptions = useDeepCompareMemo(() => options, [optionEntries])
   const memoizedTabNames = useDeepCompareMemo(() => optionKeys, [optionKeys])
-  return [memoizedOptions, memoizedTabNames]
+  return [memoizedOptions, memoizedTabNames, rightIconsList()]
 }
 
 /**

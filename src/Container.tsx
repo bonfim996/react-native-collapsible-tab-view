@@ -87,7 +87,10 @@ export const Container = React.memo(
     ) => {
       const containerRef = useContainerRef()
 
-      const [tabProps, tabNamesArray] = useTabProps(children, Tab)
+      const [tabProps, tabNamesArray, tabRightIconProps] = useTabProps(
+        children,
+        Tab
+      )
 
       const [refMap, setRef] = useAnimatedDynamicRefs()
 
@@ -426,6 +429,8 @@ export const Container = React.memo(
                     width,
                     onTabPress,
                     tabProps,
+                    // @ts-ignore
+                    rightIconArray: tabRightIconProps,
                   })}
               </View>
             </Animated.View>
