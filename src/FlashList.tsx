@@ -18,14 +18,12 @@ import {
  * Used as a memo to prevent rerendering too often when the context changes.
  * See: https://github.com/facebook/react/issues/15156#issuecomment-474590693
  */
-const FlashListMemo = React.memo(
-  React.forwardRef<
-    SFlashList<any>,
-    React.PropsWithChildren<FlashListProps<unknown>>
-  >((props, passRef) => {
-    return <AnimatedFlashList ref={passRef} {...props} />
-  })
-)
+const FlashListMemo = React.forwardRef<
+  SFlashList<any>,
+  React.PropsWithChildren<FlashListProps<unknown>>
+>((props, passRef) => {
+  return <AnimatedFlashList ref={passRef} {...props} />
+})
 
 function FlashListImpl<R>(
   {
@@ -38,7 +36,7 @@ function FlashListImpl<R>(
   passRef: React.Ref<SFlashList<any>>
 ): React.ReactElement {
   const name = useTabNameContext()
-  const { setRef, contentInset } = useTabsContext()
+  const { setRef, contentInset } = useTabsContext()!
   const ref = useSharedAnimatedRef<SFlashList<unknown>>(passRef)
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
@@ -48,11 +46,7 @@ function FlashListImpl<R>(
     enable(true)
   })
 
-  const {
-    style: _style,
-    contentContainerStyle: _contentContainerStyle,
-    progressViewOffset,
-  } = useCollapsibleStyle()
+  const { progressViewOffset } = useCollapsibleStyle()
 
   React.useEffect(() => {
     setRef(name, ref)
@@ -62,45 +56,26 @@ function FlashListImpl<R>(
     name,
   })
 
-  const scrollContentSizeChangeHandlers = useChainCallback(
-    React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
-      onContentSizeChange,
-      scrollContentSizeChange,
-    ])
-  )
+  const scrollContentSizeChangeHandlers = useChainCallback([
+    scrollContentSizeChange,
+    onContentSizeChange,
+  ])
 
-  const memoRefreshControl = React.useMemo(
-    () =>
-      refreshControl &&
-      React.cloneElement(refreshControl, {
-        progressViewOffset,
-        ...refreshControl.props,
-      }),
-    [progressViewOffset, refreshControl]
-  )
+  const memoRefreshControl =
+    refreshControl &&
+    React.cloneElement(refreshControl, {
+      progressViewOffset,
+      ...refreshControl.props,
+    })
 
   const contentInsetValue = useConvertAnimatedToValue(contentInset)
 
-  const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
-    contentInsetValue,
-  ])
+  const memoContentInset = { top: contentInsetValue }
 
-  const memoContentOffset = React.useMemo(
-    () => ({ x: 0, y: -contentInsetValue }),
-    [contentInsetValue]
-  )
-
-  const memoContentContainerStyle = React.useMemo(
-    () => [
-      _contentContainerStyle,
-      // TODO: investigate types
-      contentContainerStyle as any,
-    ],
-    [_contentContainerStyle, contentContainerStyle]
-  )
-  const memoStyle = React.useMemo(() => [_style, style], [_style, style])
+  const memoContentOffset = { x: 0, y: -contentInsetValue }
 
   return (
+    // @ts-ignore
     <FlashListMemo
       {...rest}
       ref={ref}

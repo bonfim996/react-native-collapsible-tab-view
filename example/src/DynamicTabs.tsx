@@ -29,7 +29,7 @@ const DynamicTabs: ExampleComponentType = () => {
 
   const [currentTabIndex, setCurrentTabIndex] = React.useState(0)
 
-  const addTab = React.useCallback(() => {
+  const addTab = () => {
     const newIndex = lastTabIndex + 1
     setTabs((t) => [
       ...t,
@@ -39,20 +39,20 @@ const DynamicTabs: ExampleComponentType = () => {
       },
     ])
     setLastTabIndex(newIndex)
-  }, [lastTabIndex])
+  }
 
-  const removeTab = React.useCallback(() => {
+  const removeTab = () => {
     setTabs((t) => {
       t.splice(currentTabIndex, 1)
       return [...t]
     })
-  }, [currentTabIndex])
+  }
 
-  const shuffleTabs = React.useCallback(() => {
+  const shuffleTabs = () => {
     setTabs((t) => {
       return [...shuffleArray(t)]
     })
-  }, [])
+  }
 
   const HeaderComponent = () => {
     return (
@@ -74,9 +74,8 @@ const DynamicTabs: ExampleComponentType = () => {
     )
   }
 
-  const TabBarComponent = React.useCallback(
-    (props) => <Tabs.MaterialTabBar {...props} scrollEnabled />,
-    []
+  const TabBarComponent = (props: any) => (
+    <Tabs.MaterialTabBar {...props} scrollEnabled />
   )
 
   return (

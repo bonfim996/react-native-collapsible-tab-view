@@ -98,30 +98,27 @@ const MaterialTabBar = <T extends TabName = TabName>({
     }
   }, [scrollEnabled, nTabs, tabNames, width])
 
-  const onTabItemLayout = React.useCallback(
-    (event: LayoutChangeEvent, name: T) => {
-      if (scrollEnabled) {
-        if (!event.nativeEvent?.layout) return
-        const { width, x } = event.nativeEvent.layout
+  const onTabItemLayout = (event: LayoutChangeEvent, name: T) => {
+    if (scrollEnabled) {
+      if (!event.nativeEvent?.layout) return
+      const { width, x } = event.nativeEvent.layout
 
-        itemLayoutGathering.current.set(name, {
-          width,
-          x,
-        })
+      itemLayoutGathering.current.set(name, {
+        width,
+        x,
+      })
 
-        // pick out the layouts for the tabs we know about (in case they changed dynamically)
-        const layout = Array.from(itemLayoutGathering.current.entries())
-          .filter(([tabName]) => tabNames.includes(tabName))
-          .map(([, layout]) => layout)
-          .sort((a, b) => a.x - b.x)
+      // pick out the layouts for the tabs we know about (in case they changed dynamically)
+      const layout = Array.from(itemLayoutGathering.current.entries())
+        .filter(([tabName]) => tabNames.includes(tabName))
+        .map(([, layout]) => layout)
+        .sort((a, b) => a.x - b.x)
 
-        if (layout.length === tabNames.length) {
-          setItemsLayout(layout)
-        }
+      if (layout.length === tabNames.length) {
+        setItemsLayout(layout)
       }
-    },
-    [scrollEnabled, tabNames]
-  )
+    }
+  }
 
   const cancelNextScrollSync = useSharedValue(index.value)
 
@@ -238,7 +235,7 @@ const MaterialTabBar = <T extends TabName = TabName>({
   )
 }
 
-const MemoizedTabBar = React.memo(MaterialTabBar)
+const MemoizedTabBar = MaterialTabBar
 
 export { MemoizedTabBar as MaterialTabBar }
 

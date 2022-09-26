@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import {
   Tabs,
@@ -81,15 +81,14 @@ function TabItem<T extends TabName>({
 
 const Example = React.forwardRef<CollapsibleRef, Props>(
   ({ emptyContacts, ...props }, ref) => {
-    const makeLabel = useCallback(
-      <T extends TabName>(label: string) => (props: TabItemProps<T>) => (
-        <TabItem
-          index={props.index}
-          indexDecimal={props.indexDecimal}
-          label={label}
-        />
-      ),
-      []
+    const makeLabel = <T extends TabName>(label: string) => (
+      props: TabItemProps<T>
+    ) => (
+      <TabItem
+        index={props.index}
+        indexDecimal={props.indexDecimal}
+        label={label}
+      />
     )
 
     return (

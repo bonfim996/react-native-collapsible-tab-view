@@ -1,5 +1,4 @@
 import {
-  useMemo,
   Children,
   useState,
   useCallback,
@@ -27,7 +26,6 @@ import Animated, {
   useEvent,
   useHandler,
 } from 'react-native-reanimated'
-import { useDeepCompareMemo } from 'use-deep-compare'
 
 import { Context, TabNameContext } from './Context'
 import { IS_IOS, ONE_FRAME_MS, scrollToImpl } from './helpers'
@@ -49,14 +47,10 @@ export function useAnimatedDynamicRefs(): [
   ContextType['setRef']
 ] {
   const [map, setMap] = useState<ContextType['refMap']>({})
-  const setRef = useCallback(function <T extends RefComponent>(
-    key: TabName,
-    ref: React.RefObject<T>
-  ) {
+  const setRef = (key: TabName, ref: React.RefObject<any>) => {
     setMap((map) => ({ ...map, [key]: ref }))
     return ref
-  },
-  [])
+  }
 
   return [map, setRef]
 }
@@ -65,7 +59,7 @@ export function useTabProps<T extends TabName>(
   children: TabReactElement<T>[] | TabReactElement<T>,
   tabType: Function
 ): [TabsWithProps<T>, T[]] {
-  const options = useMemo(() => {
+  const options = () => {
     const tabOptions: TabsWithProps<T> = new Map()
     if (children) {
       Children.forEach(children, (element, index) => {
@@ -89,12 +83,10 @@ export function useTabProps<T extends TabName>(
       })
     }
     return tabOptions
-  }, [children, tabType])
-  const optionEntries = Array.from(options.entries())
-  const optionKeys = Array.from(options.keys())
-  const memoizedOptions = useDeepCompareMemo(() => options, [optionEntries])
-  const memoizedTabNames = useDeepCompareMemo(() => optionKeys, [optionKeys])
-  return [memoizedOptions, memoizedTabNames]
+  }
+  const opts = options()
+  const optionKeys = Array.from(opts.keys())
+  return [opts, optionKeys]
 }
 
 /**
@@ -146,34 +138,25 @@ export function useCollapsibleStyle(): CollapsibleStyle {
     useConvertAnimatedToValue(tabBarHeight),
     useConvertAnimatedToValue(headerHeight),
   ]
-  return useMemo(
-    () => ({
-      style: { width },
-      contentContainerStyle: {
-        minHeight:
-          IS_IOS && !allowHeaderOverscroll
-            ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
-            : (containerHeightVal || 0) + (headerHeightVal || 0),
-        paddingTop:
-          IS_IOS && !allowHeaderOverscroll
-            ? 0
-            : (headerHeightVal || 0) + (tabBarHeightVal || 0),
-      },
-      progressViewOffset:
-        // on iOS we need the refresh control to be at the top if overscrolling
-        IS_IOS && allowHeaderOverscroll
+  return {
+    style: { width },
+    contentContainerStyle: {
+      minHeight:
+        IS_IOS && !allowHeaderOverscroll
+          ? (containerHeightVal || 0) - (tabBarHeightVal || 0)
+          : (containerHeightVal || 0) + (headerHeightVal || 0),
+      paddingTop:
+        IS_IOS && !allowHeaderOverscroll
           ? 0
-          : // on android we need it below the header or it doesn't show because of z-index
-            (headerHeightVal || 0) + (tabBarHeightVal || 0),
-    }),
-    [
-      allowHeaderOverscroll,
-      containerHeightVal,
-      headerHeightVal,
-      tabBarHeightVal,
-      width,
-    ]
-  )
+          : (headerHeightVal || 0) + (tabBarHeightVal || 0),
+    },
+    progressViewOffset:
+      // on iOS we need the refresh control to be at the top if overscrolling
+      IS_IOS && allowHeaderOverscroll
+        ? 0
+        : // on android we need it below the header or it doesn't show because of z-index
+          (headerHeightVal || 0) + (tabBarHeightVal || 0),
+  }
 }
 
 export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
@@ -204,40 +187,34 @@ export function useUpdateScrollViewContentSize({ name }: { name: TabName }) {
  * @returns a function that once called will call all passed functions
  */
 export function useChainCallback(fns: (Function | undefined)[]) {
-  const callAll = useCallback(
-    (...args: unknown[]) => {
-      fns.forEach((fn) => {
-        if (typeof fn === 'function') {
-          fn(...args)
-        }
-      })
-    },
-    [fns]
-  )
+  const callAll = (...args: unknown[]) => {
+    fns.forEach((fn) => {
+      if (typeof fn === 'function') {
+        fn(...args)
+      }
+    })
+  }
   return callAll
 }
 
 export function useScroller<T extends RefComponent>() {
   const { contentInset } = useTabsContext()!
 
-  const scroller = useCallback(
-    (
-      ref: Ref<T> | undefined,
-      x: number,
-      y: number,
-      animated: boolean,
-      _debugKey: string
-    ) => {
-      'worklet'
-      if (!ref) return
-      //! this is left here on purpose to ease troubleshooting (uncomment when necessary)
-      // console.log(
-      //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
-      // )
-      scrollToImpl(ref, x, y - contentInset.value, animated)
-    },
-    [contentInset]
-  )
+  const scroller = (
+    ref: Ref<T> | undefined,
+    x: number,
+    y: number,
+    animated: boolean,
+    _debugKey: string
+  ) => {
+    'worklet'
+    if (!ref) return
+    //! this is left here on purpose to ease troubleshooting (uncomment when necessary)
+    // console.log(
+    //   `${_debugKey}, y: ${y}, y adjusted: ${y - contentInset.value}`
+    // )
+    scrollToImpl(ref, x, y - contentInset.value, animated)
+  }
 
   return scroller
 }
@@ -283,10 +260,7 @@ export const useScrollHandlerY = (name: TabName) => {
    */
   const afterDrag = useSharedValue(0)
 
-  const tabIndex = useMemo(() => tabNames.value.findIndex((n) => n === name), [
-    tabNames,
-    name,
-  ])
+  const tabIndex = tabNames.value.findIndex((n) => n === name)
 
   const scrollTo = useScroller()
 
